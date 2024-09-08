@@ -1,6 +1,6 @@
 import { Button, Form, Input, InputNumber, Space } from "antd";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import config from "../../configs";
 import Wrapper from "../Wrapper";
 const layout = {
@@ -37,6 +37,10 @@ function AddCourse() {
   };
   return (
     <Wrapper my={3}>
+      <Button type="primary" danger>
+        <Link to={config.routes.admin.courses}>Back</Link>
+      </Button>
+      <h1>Add Course</h1>
       <Form
         {...layout}
         form={form}
@@ -55,7 +59,7 @@ function AddCourse() {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Enter name" />
         </Form.Item>
         <Form.Item
           name="description"
@@ -66,7 +70,7 @@ function AddCourse() {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Enter description" />
         </Form.Item>
         <Form.Item
           name="price"

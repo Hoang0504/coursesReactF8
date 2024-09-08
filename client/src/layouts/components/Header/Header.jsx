@@ -1,5 +1,9 @@
 import { Layout, Menu } from "antd";
-import { HomeOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  PlusCircleOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 import Wrapper from "../../../components/Wrapper";
 import { useState } from "react";
@@ -22,9 +26,9 @@ const items = [
       {
         label: "Course",
         key: "courses",
-        icon: <UserOutlined />,
+        icon: <PlusCircleOutlined />,
       },
-      // { label: "Roles", key: "roles", icon: <UserOutlined /> },
+      { label: "Add course", key: "add-course", icon: <PlusCircleOutlined /> },
     ],
   },
 ];
@@ -47,12 +51,14 @@ function Header() {
     console.log(btnName);
 
     switch (btnName) {
-      case "home": {
+      case "home":
         navigate(config.routes.home);
         break;
-      }
       case "courses":
         navigate(config.routes.admin.courses);
+        break;
+      case "add-course":
+        navigate(config.routes.admin.addCourse);
         break;
       default:
         console.log("Not set this menu");

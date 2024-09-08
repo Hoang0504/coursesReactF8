@@ -5,6 +5,10 @@ const coursesController = {
     const courses = await Course.find();
     res.json(courses);
   },
+  listDeleted: async (req, res) => {
+    const courses = await Course.findDeleted({});
+    res.json(courses);
+  },
   details: async (req, res) => {
     const courses = await Course.find({ _id: req.params.id });
     res.json(courses);
@@ -22,9 +26,26 @@ const coursesController = {
   },
   delete: async (req, res) => {
     const courseDeleteId = req.params.id;
+    const courseDelete = await Course.delete({ _id: courseDeleteId });
 
-    const courseDelete = await Course.deleteOne({ _id: courseDeleteId });
     res.json(courseDelete);
+  },
+  deleteForever: async (req, res) => {
+    const courseDeleteId = req.params.id;
+    const courseDelete = await Course.deleteOne({ _id: courseDeleteId });
+
+    res.json(courseDelete);
+  },
+  restore: async (req, res) => {
+    const courseDeleteId = req.params.id;
+    const courseRestored = await Course.findOneAndUpdateDeleted(
+      { _id: courseDeleteId },
+      {
+        deleted: false,
+      }
+    );
+
+    res.json(courseRestored);
   },
 };
 

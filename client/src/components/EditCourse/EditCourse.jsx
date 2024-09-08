@@ -43,7 +43,7 @@ function EditCourse() {
   const onFinish = async (values) => {
     // console.log(values);
     try {
-      const res = await axios.patch(
+      const res = await axios.put(
         `http://localhost:3001/api/courses/${courseId}`,
         values
       );

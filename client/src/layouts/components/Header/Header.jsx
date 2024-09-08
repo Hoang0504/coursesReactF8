@@ -14,7 +14,7 @@ const { Header: HeaderAntd } = Layout;
 
 const items = [
   {
-    label: <Link to={config.routes.home}>Home</Link>,
+    label: "Home",
     key: "home",
     icon: <HomeOutlined />,
   },
@@ -29,6 +29,11 @@ const items = [
         icon: <PlusCircleOutlined />,
       },
       { label: "Add course", key: "add-course", icon: <PlusCircleOutlined /> },
+      {
+        label: "Courses deleted",
+        key: "courses-deleted",
+        icon: <PlusCircleOutlined />,
+      },
     ],
   },
 ];
@@ -38,7 +43,6 @@ function Header() {
   const location = useLocation();
   const pathName = location.pathname;
   const menuName = pathName.substring(pathName.lastIndexOf("/") + 1);
-  console.log(menuName);
 
   // const [currentSelected, setCurrentSelected] = useState(menuName);
   let currentSelected = menuName;
@@ -48,7 +52,6 @@ function Header() {
 
   const handleMenuClick = (e) => {
     const btnName = e.key;
-    console.log(btnName);
 
     switch (btnName) {
       case "home":
@@ -60,8 +63,11 @@ function Header() {
       case "add-course":
         navigate(config.routes.admin.addCourse);
         break;
+      case "courses-deleted":
+        navigate(config.routes.admin.coursesDeleted);
+        break;
       default:
-        console.log("Not set this menu");
+        console.error("Not set this menu");
     }
   };
 

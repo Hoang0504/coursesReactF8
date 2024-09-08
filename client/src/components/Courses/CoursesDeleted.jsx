@@ -1,26 +1,37 @@
 import React, { useEffect } from "react";
 import { Button, Table } from "antd";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Wrapper from "../Wrapper";
 import config from "../../configs";
 
-function Courses() {
+function CoursesDeleted() {
+  const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
 
-  const handleDelete = async (id) => {
-    console.log(id);
-    const isConfirm = window.confirm("Are you sure you want to delete");
+  const handleRestore = async (id) => {
+    try {
+      const res = await axios.patch(
+        `${process.env.REACT_APP_BASE_URL_API}/courses/${id}/restore`
+      );
+      if (res.status === 200) {
+        navigate(config.routes.admin.courses);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  const handleDeleteForever = async (id) => {
+    const isConfirm = window.confirm("Are you sure you want to forever delete");
     if (isConfirm) {
       try {
         const res = await axios.delete(
-          `${process.env.REACT_APP_BASE_URL_API}/courses/${id}`
+          `${process.env.REACT_APP_BASE_URL_API}/courses/${id}/delete-forever`
         );
-        console.log(res);
         if (res.status === 200) {
-          fetchCourses();
+          fetchCoursesDeleted();
         }
       } catch (e) {}
     }
@@ -48,26 +59,26 @@ function Courses() {
       key: "action",
       render: (_, record) => (
         <>
-          <Link to={config.routes.admin.editCourse.replace(":id", record._id)}>
-            <Button type="primary">Edit</Button>
-          </Link>
+          <Button type="primary" onClick={() => handleRestore(record._id)}>
+            Restore
+          </Button>
 
           <Button
-            onClick={() => handleDelete(record._id)}
+            onClick={() => handleDeleteForever(record._id)}
             className="ml-4"
             type="primary"
             danger
           >
-            Delete
+            Delete forever
           </Button>
         </>
       ),
     },
   ];
 
-  const fetchCourses = async () => {
+  const fetchCoursesDeleted = async () => {
     try {
-      const res = await axios("http://localhost:3001/api/courses");
+      const res = await axios("http://localhost:3001/api/courses/list-deleted");
       setCourses(res.data);
       console.log(res.data);
     } catch (err) {
@@ -76,27 +87,20 @@ function Courses() {
   };
 
   useEffect(() => {
-    fetchCourses();
+    fetchCoursesDeleted();
   }, []);
 
   return (
     <Wrapper my={3}>
-      <h1>Courses</h1>
-      <div className="d-flex align-items-center justify-content-between">
-        <Link to={config.routes.admin.addCourse}>
-          <Button className="my-4" type="primary">
-            Add course
-          </Button>
-        </Link>
-        <Link to={config.routes.admin.coursesDeleted}>
-          <Button className="my-4" type="primary" danger>
-            Course deleted
-          </Button>
-        </Link>
-      </div>
+      <h1>Courses deleted</h1>
+      <Link to={config.routes.admin.courses}>
+        <Button className="my-4" type="primary">
+          Back
+        </Button>
+      </Link>
       <Table columns={columns} dataSource={courses} rowKey="_id" />
     </Wrapper>
   );
 }
 
-export default Courses;
+export default CoursesDeleted;

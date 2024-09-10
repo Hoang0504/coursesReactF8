@@ -6,7 +6,7 @@ import DefaultLayout from "./layouts/DefaultLayout";
 
 function App() {
     return (
-        <Router>
+        <Router basename="/coursesReactF8">
             <Routes>
                 {routes.map((route, idx) => {
                     const Page = route.component;

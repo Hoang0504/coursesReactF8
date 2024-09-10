@@ -1,6 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
+  "homepage": "https://hoang0504.github.io/coursesReactF8",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "babel-plugin-module-resolver": "^5.0.2",
     "customize-cra": "^1.0.0",
+    "gh-pages": "^6.1.1",
     "react-app-rewired": "^2.2.1",
     "sass": "^1.78.0"
   },
@@ -28,7 +30,9 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject"
+    "eject": "react-app-rewired eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

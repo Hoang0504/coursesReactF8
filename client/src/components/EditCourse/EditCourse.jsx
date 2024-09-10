@@ -29,7 +29,7 @@ function EditCourse() {
   const fetchData = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/api/courses/${courseId}`
+        `${process.env.REACT_APP_BASE_URL_API}/courses/${courseId}`
       );
       console.log(res.data);
       const { name, description, price } = res.data[0];
@@ -44,7 +44,7 @@ function EditCourse() {
     // console.log(values);
     try {
       const res = await axios.put(
-        `http://localhost:3001/api/courses/${courseId}`,
+        `${process.env.REACT_APP_BASE_URL_API}/courses/${courseId}`,
         values
       );
       if (res.status === 200) {

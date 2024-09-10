@@ -22,9 +22,9 @@ function AddCourse() {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
-    // console.log(values);
+    // console.log(process.env.REACT_APP_BASE_URL_API);
     try {
-      const res = await axios.post("http://localhost:3001/api/courses", values);
+      const res = await axios.post(`${process.env.REACT_APP_BASE_URL_API}/courses`, values);
       if (res.status === 200) {
         navigate(config.routes.admin.courses);
       }

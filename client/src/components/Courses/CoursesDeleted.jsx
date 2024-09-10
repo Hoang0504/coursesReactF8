@@ -78,7 +78,7 @@ function CoursesDeleted() {
 
   const fetchCoursesDeleted = async () => {
     try {
-      const res = await axios("http://localhost:3001/api/courses/list-deleted");
+      const res = await axios(`${process.env.REACT_APP_BASE_URL_API}/courses/list-deleted`);
       setCourses(res.data);
       console.log(res.data);
     } catch (err) {

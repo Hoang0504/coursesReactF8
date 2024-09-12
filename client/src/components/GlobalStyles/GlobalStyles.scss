@@ -1,5 +1,10 @@
 @import 'normalize.css';
 
+:root {
+    --header-height: 64px;
+    --footer-height: 69px;
+}
+
 * {
     margin: 0;
     padding: 0;

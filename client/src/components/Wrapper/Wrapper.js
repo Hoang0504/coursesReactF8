@@ -5,9 +5,9 @@ import styles from './Wrapper.module.scss';
 
 const cx = classnames.bind(styles);
 
-function Wrapper({ my, children }) {
+function Wrapper({ my, center, className, children }) {
     return (
-        <div className={cx('wrapper', { [`my-${my}`]: my })}>{children}</div>
+        <div className={cx('wrapper', { [`my-${my}`]: my, center, [className]: className })}>{children}</div>
     );
 }
 

@@ -1,0 +1,7 @@
+.link {
+    color: #999;
+
+    & + .link {
+        margin-left: 10px;
+    }
+}

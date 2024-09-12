@@ -6,3 +6,10 @@
 .my-3 {
     margin: 3rem 0;
 }
+
+.center {
+    height: calc(100vh - (var(--header-height) + var(--header-height)));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

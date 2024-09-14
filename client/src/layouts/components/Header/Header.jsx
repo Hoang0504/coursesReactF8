@@ -6,6 +6,8 @@ import Wrapper from '../../../components/Wrapper';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import config from '../../../configs';
 import styles from './Header.module.scss';
+import { useContext, useState } from 'react';
+import { Context } from '~/components/Context';
 
 const cx = classnames.bind(styles);
 
@@ -42,6 +44,9 @@ function Header() {
     const location = useLocation();
     const pathName = location.pathname;
     const menuName = pathName.substring(pathName.lastIndexOf('/') + 1);
+    const { isLoggedIn, userLoggedIn } = useContext(Context);
+
+    // console.log(context);
 
     // const [currentSelected, setCurrentSelected] = useState(menuName);
     let currentSelected = menuName;
@@ -92,14 +97,29 @@ function Header() {
                             items={items}
                             onClick={handleMenuClick}
                         />
+                        {/* <button onClick={() => setIsLoggedIn(!isLoggedIn)}>Test</button> */}
                     </Col>
                     <Col sm={4}>
-                        <Link to={config.routes.login} className={cx('link')}>
-                            Login
-                        </Link>
-                        <Link to={config.routes.register} className={cx('link')}>
-                            Register
-                        </Link>
+                        {/* isLoggedIn */}
+                        {isLoggedIn ? (
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <h5 style={{ color: 'red', marginBottom: 0, marginRight: '6px' }}>
+                                    Hello {userLoggedIn.username}
+                                </h5>
+                                <Link to={config.routes.logout} className={cx('link')}>
+                                    Logout
+                                </Link>
+                            </div>
+                        ) : (
+                            <>
+                                <Link to={config.routes.login} className={cx('link')}>
+                                    Login
+                                </Link>
+                                <Link to={config.routes.register} className={cx('link')}>
+                                    Register
+                                </Link>
+                            </>
+                        )}
                     </Col>
                 </Row>
             </Wrapper>

@@ -8,8 +8,7 @@ const authenticateToken = (req, res, next) => {
     const token = req.headers.authorization;
     // res.json({ token, secretKey });
     if (!token) {
-        req.isAuthenticated = false;
-        return next();
+        return res.status(401).json({ message: 'Unauthorize!' });
     }
 
     // Verify token (you can use jwt.verify)
@@ -17,7 +16,6 @@ const authenticateToken = (req, res, next) => {
         if (err) {
             return res.status(403).json({ message: 'Forbidden, invalid token' });
         }
-        req.isAuthenticated = true;
         req.user = user;
         next(); // If token is valid, proceed to the route
     });

@@ -11,9 +11,9 @@ const usersController = {
 
         if (user) {
             // res.json({ secretKey });
-            const accessToken = await jwt.sign({ user }, secretKey, { expiresIn: '2m' });
-            const refreshToken = await jwt.sign({ user }, secretKey, { expiresIn: '10m' });
-            res.json({ accessToken, refreshToken });
+            const accessToken = jwt.sign({ user }, secretKey, { expiresIn: '2m' });
+            const refreshToken = jwt.sign({ user }, secretKey, { expiresIn: '10m' });
+            res.json({ user, accessToken, refreshToken });
         } else {
             // console.log('yse');
             res.status(401).json({ message: 'Invalid username or password' });

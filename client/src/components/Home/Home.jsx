@@ -10,7 +10,7 @@ function Home() {
 
     const fetchCourses = async () => {
         try {
-            const res = await axios(`${process.env.REACT_APP_BASE_URL_API}/courses`);
+            const res = await axios(`${process.env.REACT_APP_PUBLIC_URL_API}/courses`);
             setCourses(res.data);
             console.log(res.data);
         } catch (err) {

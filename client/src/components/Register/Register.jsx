@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 function Register() {
     const handleRegister = async (value) => {
         try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL_API}/users`, value);
+            const response = await axios.post(`${process.env.REACT_APP_PRIVATE_URL_API}/users`, value);
             alert(response.data.message);
         } catch (e) {
             console.error(e);

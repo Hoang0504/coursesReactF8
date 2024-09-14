@@ -4,18 +4,26 @@ import Wrapper from '../Wrapper';
 import styles from './Login.module.scss';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Context } from '../Context';
 import config from '~/configs';
+import { useContext } from 'react';
 
 const cx = classNames.bind(styles);
 
 function Login() {
     const navigate = useNavigate();
+    const { setIsLoggedIn, setUserLoggedIn } = useContext(Context);
     const handleLogin = async (value) => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_BASE_URL_API}/users/login?username=${value.username}&password=${value.password}`,
+                `${process.env.REACT_APP_PUBLIC_URL_API}/users?username=${value.username}&password=${value.password}`,
             );
             if (response.status === 200) {
+                console.log(response.data.user);
+                setUserLoggedIn(response.data.user);
+                setIsLoggedIn(true);
+                alert(`accessToken: ${response.data.accessToken}`);
+
                 navigate(config.routes.admin.courses);
             }
             // alert(response.data.message);

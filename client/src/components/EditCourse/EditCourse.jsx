@@ -28,7 +28,7 @@ function EditCourse() {
 
     const fetchData = async () => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_BASE_URL_API}/courses/${courseId}`);
+            const res = await axios.get(`${process.env.REACT_APP_PUBLIC_URL_API}/courses/${courseId}`);
             console.log(res.data);
             const { name, description, price } = res.data[0];
             console.log({ name, description, price });
@@ -41,7 +41,7 @@ function EditCourse() {
     const onFinish = async (values) => {
         // console.log(values);
         try {
-            const res = await axios.put(`${process.env.REACT_APP_BASE_URL_API}/courses/${courseId}`, values);
+            const res = await axios.put(`${process.env.REACT_APP_PRIVATE_URL_API}/courses/${courseId}`, values);
             if (res.status === 200) {
                 navigate(config.routes.admin.courses);
             }

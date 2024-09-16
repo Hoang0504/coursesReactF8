@@ -1,8 +1,11 @@
 import { Button, Form, Input, InputNumber, Space } from 'antd';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import useRedirectLogin from '~/hooks/useRedirectLogin';
 import config from '../../configs';
 import Wrapper from '../Wrapper';
+import { useContext } from 'react';
+import { Context } from '../Context';
 const layout = {
     labelCol: {
         span: 8,
@@ -19,22 +22,21 @@ const tailLayout = {
 };
 function AddCourse() {
     const navigate = useNavigate();
+    const { token } = useContext(Context);
     const [form] = Form.useForm();
+    const handleError = useRedirectLogin();
 
     const onFinish = async (values) => {
         // console.log(process.env.REACT_APP_BASE_URL_API);
         try {
-            const res = await axios.post(`${process.env.REACT_APP_PRIVATE_URL_API}/courses`, values);
+            const res = await axios.post(`${process.env.REACT_APP_PRIVATE_URL_API}/courses`, values, {
+                headers: { Authorization: token },
+            });
             if (res.status === 200) {
                 navigate(config.routes.admin.courses);
             }
         } catch (err) {
-            if (err.status === 401) {
-                alert(err.response.data.message);
-                navigate(config.routes.login);
-            } else {
-                console.error(err);
-            }
+            handleError(err);
         }
     };
     const onReset = () => {

@@ -62,12 +62,8 @@ const usersController = {
 
     // protected methods
     store: async (req, res) => {
-        if (req.isAuthenticated) {
-            const newUser = await User.create(req.body);
-            res.json({ message: 'User registered successfully', newUser });
-        } else {
-            res.status(401).json({ message: 'You are not authenticated. Please log in.' });
-        }
+        const newUser = await User.create(req.body);
+        res.json({ message: 'User registered successfully', newUser });
     },
 };
 

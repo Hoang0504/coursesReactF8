@@ -1,18 +1,29 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 import classNames from 'classnames/bind';
-import Wrapper from '../Wrapper';
-import styles from './Register.module.scss';
+import { useContext } from 'react';
 import axios from 'axios';
+import useRedirectLogin from '~/hooks/useRedirectLogin';
+import Wrapper from '../Wrapper';
+import { Context } from '../Context';
+import styles from './Register.module.scss';
+import { useNavigate } from 'react-router-dom';
+import config from '~/configs';
 
 const cx = classNames.bind(styles);
 
 function Register() {
+    const navigate = useNavigate();
+    const handleError = useRedirectLogin();
+    const { token } = useContext(Context);
     const handleRegister = async (value) => {
         try {
-            const response = await axios.post(`${process.env.REACT_APP_PRIVATE_URL_API}/users`, value);
+            const response = await axios.post(`${process.env.REACT_APP_PRIVATE_URL_API}/users`, value, {
+                headers: { Authorization: token },
+            });
             alert(response.data.message);
+            navigate(config.routes.admin.courses);
         } catch (e) {
-            console.error(e);
+            handleError(e);
         }
     };
 

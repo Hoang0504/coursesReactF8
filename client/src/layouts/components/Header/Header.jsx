@@ -1,4 +1,4 @@
-import { Col, Layout, Menu, Row } from 'antd';
+import { Button, Col, Layout, Menu, Row } from 'antd';
 import { HomeOutlined, PlusCircleOutlined, UserOutlined } from '@ant-design/icons';
 import classnames from 'classnames/bind';
 
@@ -35,6 +35,7 @@ const items = [
                 key: 'courses-deleted',
                 icon: <PlusCircleOutlined />,
             },
+            { label: 'Register a new user', key: 'register-new-user', icon: <PlusCircleOutlined /> },
         ],
     },
 ];
@@ -44,11 +45,16 @@ function Header() {
     const location = useLocation();
     const pathName = location.pathname;
     const menuName = pathName.substring(pathName.lastIndexOf('/') + 1);
-    const { isLoggedIn, userLoggedIn } = useContext(Context);
+    const { isLoggedIn, userLoggedIn, setIsLoggedIn, setUserLoggedIn, setToken } = useContext(Context);
 
-    // console.log(context);
+    const handleLogout = () => {
+        setUserLoggedIn({});
+        setIsLoggedIn(false);
+        setToken('');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('userLoggedIn');
+    };
 
-    // const [currentSelected, setCurrentSelected] = useState(menuName);
     let currentSelected = menuName;
     if (!currentSelected) {
         currentSelected = 'home';
@@ -69,6 +75,9 @@ function Header() {
                 break;
             case 'courses-deleted':
                 navigate(config.routes.admin.coursesDeleted);
+                break;
+            case 'register-new-user':
+                navigate(config.routes.admin.register);
                 break;
             default:
                 console.error('Not set this menu');
@@ -102,21 +111,18 @@ function Header() {
                     <Col sm={4}>
                         {/* isLoggedIn */}
                         {isLoggedIn ? (
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div className="h-100" style={{ display: 'flex', alignItems: 'center' }}>
                                 <h5 style={{ color: 'red', marginBottom: 0, marginRight: '6px' }}>
                                     Hello {userLoggedIn.username}
                                 </h5>
-                                <Link to={config.routes.logout} className={cx('link')}>
+                                <Button type="primary" danger onClick={handleLogout}>
                                     Logout
-                                </Link>
+                                </Button>
                             </div>
                         ) : (
                             <>
                                 <Link to={config.routes.login} className={cx('link')}>
                                     Login
-                                </Link>
-                                <Link to={config.routes.register} className={cx('link')}>
-                                    Register
                                 </Link>
                             </>
                         )}

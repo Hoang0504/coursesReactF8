@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Button, Table } from 'antd';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -6,21 +6,29 @@ import axios from 'axios';
 
 import Wrapper from '../Wrapper';
 import config from '../../configs';
+import { Context } from '../Context';
+import useRedirectLogin from '~/hooks/useRedirectLogin';
 
 function Courses() {
     const [courses, setCourses] = useState([]);
+    const { token } = useContext(Context);
+    const handleError = useRedirectLogin();
 
     const handleDelete = async (id) => {
         console.log(id);
         const isConfirm = window.confirm('Are you sure you want to delete');
         if (isConfirm) {
             try {
-                const res = await axios.delete(`${process.env.REACT_APP_PRIVATE_URL_API}/courses/${id}`);
+                const res = await axios.delete(`${process.env.REACT_APP_PRIVATE_URL_API}/courses/${id}`, {
+                    headers: { Authorization: token },
+                });
                 console.log(res);
                 if (res.status === 200) {
                     fetchCourses();
                 }
-            } catch (e) {}
+            } catch (err) {
+                handleError(err);
+            }
         }
     };
 

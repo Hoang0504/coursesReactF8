@@ -1,14 +1,16 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Fragment } from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Fragment } from 'react';
 
-import routes from "./routes";
-import DefaultLayout from "./layouts/DefaultLayout";
+import { publicRoutes, privateRoutes } from './routes';
+import DefaultLayout from './layouts/DefaultLayout';
+import PrivateRoute from './routes/PrivateRoute';
+import NotFound from './components/NotFound';
 
 function App() {
     return (
         <Router basename="/coursesReactF8">
             <Routes>
-                {routes.map((route, idx) => {
+                {publicRoutes.map((route, idx) => {
                     const Page = route.component;
                     let Layout = DefaultLayout;
                     if (route.layout) {
@@ -19,7 +21,7 @@ function App() {
 
                     return (
                         <Route
-                            key={idx}
+                            key={route.path}
                             path={route.path}
                             element={
                                 <Layout>
@@ -29,6 +31,29 @@ function App() {
                         />
                     );
                 })}
+                {privateRoutes.map((route, idx) => {
+                    const Page = route.component;
+                    let Layout = DefaultLayout;
+                    if (route.layout) {
+                        Layout = route.layout;
+                    } else if (route.layout === null) {
+                        Layout = Fragment;
+                    }
+
+                    return (
+                        <Route key={route.path} element={<PrivateRoute />}>
+                            <Route
+                                path={route.path}
+                                element={
+                                    <Layout>
+                                        <Page />
+                                    </Layout>
+                                }
+                            />
+                        </Route>
+                    );
+                })}
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </Router>
     );

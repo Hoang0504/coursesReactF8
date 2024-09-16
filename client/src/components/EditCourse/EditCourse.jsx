@@ -3,7 +3,9 @@ import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import config from '../../configs';
 import Wrapper from '../Wrapper';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import useRedirectLogin from '~/hooks/useRedirectLogin';
+import { Context } from '../Context';
 const layout = {
     labelCol: {
         span: 8,
@@ -21,17 +23,14 @@ const tailLayout = {
 function EditCourse() {
     const navigate = useNavigate();
     const [form] = Form.useForm();
-    const [dataToEdit, setDataToEdit] = useState({});
-    // form.setFieldsValue({ name: "hi" });
+    const handleError = useRedirectLogin();
+    const { token } = useContext(Context);
 
     const { id: courseId } = useParams();
 
     const fetchData = async () => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_PUBLIC_URL_API}/courses/${courseId}`);
-            console.log(res.data);
-            const { name, description, price } = res.data[0];
-            console.log({ name, description, price });
             form.setFieldsValue(res.data[0]);
         } catch (err) {
             console.error(err);
@@ -41,12 +40,14 @@ function EditCourse() {
     const onFinish = async (values) => {
         // console.log(values);
         try {
-            const res = await axios.put(`${process.env.REACT_APP_PRIVATE_URL_API}/courses/${courseId}`, values);
+            const res = await axios.put(`${process.env.REACT_APP_PRIVATE_URL_API}/courses/${courseId}`, values, {
+                headers: { Authorization: token },
+            });
             if (res.status === 200) {
                 navigate(config.routes.admin.courses);
             }
         } catch (err) {
-            console.error(err);
+            handleError(err);
         }
     };
     const onReset = () => {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Button, Table } from 'antd';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,30 +6,53 @@ import axios from 'axios';
 
 import Wrapper from '../Wrapper';
 import config from '../../configs';
+import { Context } from '../Context';
+import useRedirectLogin from '~/hooks/useRedirectLogin';
 
 function CoursesDeleted() {
     const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
+    const { token } = useContext(Context);
 
+    const handleError = useRedirectLogin();
     const handleRestore = async (id) => {
         try {
-            const res = await axios.patch(`${process.env.REACT_APP_PRIVATE_URL_API}/courses/${id}/restore`);
+            const res = await axios.patch(`${process.env.REACT_APP_PRIVATE_URL_API}/courses/${id}/restore`, null, {
+                headers: { Authorization: token },
+            });
             if (res.status === 200) {
                 navigate(config.routes.admin.courses);
             }
-        } catch (e) {
-            console.error(e);
+        } catch (err) {
+            handleError(err);
         }
     };
     const handleDeleteForever = async (id) => {
         const isConfirm = window.confirm('Are you sure you want to forever delete');
         if (isConfirm) {
             try {
-                const res = await axios.delete(`${process.env.REACT_APP_PRIVATE_URL_API}/courses/${id}/delete-forever`);
+                const res = await axios.delete(
+                    `${process.env.REACT_APP_PRIVATE_URL_API}/courses/${id}/delete-forever`,
+                    { headers: { Authorization: token } },
+                );
                 if (res.status === 200) {
                     fetchCoursesDeleted();
                 }
-            } catch (e) {}
+            } catch (err) {
+                handleError(err);
+            }
+        }
+    };
+
+    const fetchCoursesDeleted = async () => {
+        try {
+            const res = await axios(`${process.env.REACT_APP_PRIVATE_URL_API}/courses/list-deleted`, {
+                headers: { Authorization: token },
+            });
+            setCourses(res.data);
+            console.log(res.data);
+        } catch (err) {
+            handleError(err);
         }
     };
 
@@ -66,16 +89,6 @@ function CoursesDeleted() {
             ),
         },
     ];
-
-    const fetchCoursesDeleted = async () => {
-        try {
-            const res = await axios(`${process.env.REACT_APP_PRIVATE_URL_API}/courses/list-deleted`);
-            setCourses(res.data);
-            console.log(res.data);
-        } catch (err) {
-            console.error(err);
-        }
-    };
 
     useEffect(() => {
         fetchCoursesDeleted();

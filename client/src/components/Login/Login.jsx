@@ -6,23 +6,26 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Context } from '../Context';
 import config from '~/configs';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 
 function Login() {
     const navigate = useNavigate();
-    const { setIsLoggedIn, setUserLoggedIn } = useContext(Context);
+    const { isLoggedIn, setIsLoggedIn, setUserLoggedIn, setToken } = useContext(Context);
+
     const handleLogin = async (value) => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_PUBLIC_URL_API}/users?username=${value.username}&password=${value.password}`,
             );
             if (response.status === 200) {
-                console.log(response.data.user);
+                // console.log(response.data.user);
+                sessionStorage.setItem('token', JSON.stringify(response.data.accessToken));
+                sessionStorage.setItem('userLoggedIn', JSON.stringify(response.data.user));
                 setUserLoggedIn(response.data.user);
                 setIsLoggedIn(true);
-                alert(`accessToken: ${response.data.accessToken}`);
+                setToken(response.data.accessToken);
 
                 navigate(config.routes.admin.courses);
             }
@@ -31,6 +34,12 @@ function Login() {
             alert(e.response.data.message);
         }
     };
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate(config.routes.admin.courses);
+        }
+    }, []);
 
     return (
         <Wrapper center>

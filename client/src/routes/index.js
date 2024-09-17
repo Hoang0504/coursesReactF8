@@ -5,6 +5,9 @@ import AddCourse from '../components/AddCourse';
 import EditCourse from '../components/EditCourse';
 import Login from '../components/Login';
 import Register from '../components/Register';
+import Users, { UsersDeleted } from '~/components/Users';
+import AddUser from '~/components/AddUser';
+import EditUser from '~/components/EditUser';
 
 const publicRoutes = [
     { path: config.routes.home, component: Home },
@@ -12,6 +15,10 @@ const publicRoutes = [
 ];
 const privateRoutes = [
     { path: config.routes.admin.register, component: Register },
+    { path: config.routes.admin.users, component: Users },
+    { path: config.routes.admin.addUser, component: AddUser },
+    { path: config.routes.admin.editUser, component: EditUser },
+    { path: config.routes.admin.usersDeleted, component: UsersDeleted },
     { path: config.routes.admin.courses, component: Courses },
     { path: config.routes.admin.addCourse, component: AddCourse },
     { path: config.routes.admin.editCourse, component: EditCourse },

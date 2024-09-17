@@ -11,8 +11,8 @@ const usersController = {
 
         if (user) {
             // res.json({ secretKey });
-            const accessToken = jwt.sign({ user }, secretKey, { expiresIn: '2m' });
-            const refreshToken = jwt.sign({ user }, secretKey, { expiresIn: '10m' });
+            const accessToken = jwt.sign({ user }, secretKey, { expiresIn: '1d' });
+            const refreshToken = jwt.sign({ user }, secretKey, { expiresIn: '10d' });
             res.json({ user, accessToken, refreshToken });
         } else {
             // console.log('yse');
@@ -20,17 +20,18 @@ const usersController = {
         }
         // res.json({ hi: true });
     },
+    list: async (req, res) => {
+        const users = await User.find({});
+        res.json(users);
+    },
     listDeleted: async (req, res) => {
         const users = await User.findDeleted({});
         res.json(users);
     },
     details: async (req, res) => {
-        if (req.isAuthenticated) {
-            const users = await User.find({ _id: req.params.id });
-            res.json({ users, userAuth: req.user });
-        } else {
-            res.status(401).json({ message: 'You are not authenticated. Please log in.' });
-        }
+        const users = await User.find({ _id: req.params.id });
+        res.json({ users, userAuth: req.user });
+        // res.json({ no: true });
     },
     update: async (req, res) => {
         const userUpdate = await User.updateOne({ _id: req.params.id }, { $set: req.body });

@@ -1,5 +1,5 @@
-import { Button, Col, Layout, Menu, Row } from 'antd';
-import { HomeOutlined, PlusCircleOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Badge, Button, Col, Layout, Menu, Row, Space } from 'antd';
+import { HomeOutlined, PlusCircleOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import classnames from 'classnames/bind';
 
 import Wrapper from '../../../components/Wrapper';
@@ -24,8 +24,20 @@ const items = [
         key: 'admin',
         icon: <UserOutlined />,
         children: [
+            { label: 'Register a new user', key: 'register-new-user', icon: <PlusCircleOutlined /> },
             {
-                label: 'Course',
+                label: 'Users',
+                key: 'users',
+                icon: <PlusCircleOutlined />,
+            },
+            { label: 'Add user', key: 'add-user', icon: <PlusCircleOutlined /> },
+            {
+                label: 'Users deleted',
+                key: 'users-deleted',
+                icon: <PlusCircleOutlined />,
+            },
+            {
+                label: 'Courses',
                 key: 'courses',
                 icon: <PlusCircleOutlined />,
             },
@@ -35,7 +47,6 @@ const items = [
                 key: 'courses-deleted',
                 icon: <PlusCircleOutlined />,
             },
-            { label: 'Register a new user', key: 'register-new-user', icon: <PlusCircleOutlined /> },
         ],
     },
 ];
@@ -45,7 +56,7 @@ function Header() {
     const location = useLocation();
     const pathName = location.pathname;
     const menuName = pathName.substring(pathName.lastIndexOf('/') + 1);
-    const { isLoggedIn, userLoggedIn, setIsLoggedIn, setUserLoggedIn, setToken } = useContext(Context);
+    const { isLoggedIn, userLoggedIn, setIsLoggedIn, setUserLoggedIn, setToken, cart } = useContext(Context);
 
     const handleLogout = () => {
         setUserLoggedIn({});
@@ -67,6 +78,18 @@ function Header() {
             case 'home':
                 navigate(config.routes.home);
                 break;
+            case 'register-new-user':
+                navigate(config.routes.admin.register);
+                break;
+            case 'users':
+                navigate(config.routes.admin.users);
+                break;
+            case 'add-user':
+                navigate(config.routes.admin.addUser);
+                break;
+            case 'users-deleted':
+                navigate(config.routes.admin.usersDeleted);
+                break;
             case 'courses':
                 navigate(config.routes.admin.courses);
                 break;
@@ -75,9 +98,6 @@ function Header() {
                 break;
             case 'courses-deleted':
                 navigate(config.routes.admin.coursesDeleted);
-                break;
-            case 'register-new-user':
-                navigate(config.routes.admin.register);
                 break;
             default:
                 console.error('Not set this menu');
@@ -112,7 +132,14 @@ function Header() {
                         {/* isLoggedIn */}
                         {isLoggedIn ? (
                             <div className="h-100" style={{ display: 'flex', alignItems: 'center' }}>
-                                <h5 style={{ color: 'red', marginBottom: 0, marginRight: '6px' }}>
+                                {/* <Space size="small"> */}
+                                <Badge size="small" count={cart.length}>
+                                    <Avatar shape="square" size="default">
+                                        <ShoppingCartOutlined style={{ fontSize: '30px' }} />
+                                    </Avatar>
+                                </Badge>
+                                {/* </Space> */}
+                                <h5 style={{ color: 'red', marginBottom: 0, marginRight: '6px', marginLeft: '6px' }}>
                                     Hello {userLoggedIn.username}
                                 </h5>
                                 <Button type="primary" danger onClick={handleLogout}>

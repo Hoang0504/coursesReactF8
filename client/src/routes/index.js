@@ -8,10 +8,12 @@ import Register from '../components/Register';
 import Users, { UsersDeleted } from '~/components/Users';
 import AddUser from '~/components/AddUser';
 import EditUser from '~/components/EditUser';
+import Checkout from '~/components/Checkout';
 
 const publicRoutes = [
     { path: config.routes.home, component: Home },
     { path: config.routes.login, component: Login },
+    { path: config.routes.checkout, component: Checkout },
 ];
 const privateRoutes = [
     { path: config.routes.admin.register, component: Register },

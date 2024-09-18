@@ -5,10 +5,30 @@ import axios from 'axios';
 
 import Wrapper from '../Wrapper';
 import { Context } from '../Context';
+import { useNavigate } from 'react-router-dom';
+import config from '~/configs';
 
 function Home() {
+    const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
-    const { cart, setCart } = useContext(Context);
+    const { cart, setCart, isLoggedIn } = useContext(Context);
+
+    const handleToCart = (course) => {
+        if (isLoggedIn) {
+            let newCart = null;
+            if (cart.some((item) => item._id === course._id)) {
+                newCart = cart.filter((item) => item._id !== course._id);
+            } else {
+                newCart = [...cart, course];
+                course.quantity = 1;
+            }
+            setCart(newCart);
+            sessionStorage.setItem('cart', JSON.stringify(newCart));
+        } else {
+            alert('You must be logged in to add cart.');
+            navigate(config.routes.login);
+        }
+    };
 
     const fetchCourses = async () => {
         try {
@@ -35,14 +55,8 @@ function Home() {
                             <Button type="primary" style={{ marginRight: '5px' }}>
                                 Buy now
                             </Button>
-                            <Button
-                                type="primary"
-                                danger
-                                onClick={() => {
-                                    setCart([...cart, course]);
-                                }}
-                            >
-                                Add to cart
+                            <Button type="primary" danger onClick={() => handleToCart(course)}>
+                                {cart.some((item) => item._id === course._id) ? 'Remove cart' : 'Add cart'}
                             </Button>
                         </Card>
                     </Col>

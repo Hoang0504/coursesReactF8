@@ -1,5 +1,6 @@
 const routes = {
     home: '/',
+    checkout: '/checkout',
     login: '/login',
     admin: {
         register: '/register-new-user',

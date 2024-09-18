@@ -103,6 +103,9 @@ function Header() {
                 console.error('Not set this menu');
         }
     };
+    const handleClickCart = () => {
+        navigate(config.routes.checkout);
+    };
 
     return (
         <HeaderAntd
@@ -133,7 +136,7 @@ function Header() {
                         {isLoggedIn ? (
                             <div className="h-100" style={{ display: 'flex', alignItems: 'center' }}>
                                 {/* <Space size="small"> */}
-                                <Badge size="small" count={cart.length}>
+                                <Badge size="small" count={cart.length} onClick={handleClickCart}>
                                     <Avatar shape="square" size="default">
                                         <ShoppingCartOutlined style={{ fontSize: '30px' }} />
                                     </Avatar>
